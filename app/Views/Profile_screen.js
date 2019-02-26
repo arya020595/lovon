@@ -4,14 +4,12 @@ import { Container, Header, Content, Input, Item, Form, Footer, Card, CardItem, 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
 
+var s = require("../Assets/Style")
+
 export default class Profile_screen extends Component {
 
     static navigationOptions = {
         title: 'My Account',
-        headerTintColor: '#fff',
-        headerStyle: {
-            backgroundColor: '#ff3c0e'
-        },
     };
 
     render() {
@@ -19,8 +17,8 @@ export default class Profile_screen extends Component {
             <Container style={{backgroundColor:"#DDD"}}>
                 <Content>
                     <Grid>
-                        <Col><H2 style={{ padding: 10, color: "#333", marginTop: 10, }}>Edit Profile</H2></Col>
-                        <Col style={{ alignContent: "flex-end" }}><Text style={{ padding: 10, color: "#333", marginTop: 10, textAlign:"right" }}>Sign Out</Text></Col>
+                        <Col><H2 style={{ padding: 10, color: "#011b1d", marginTop: 10, }}>Edit Profile</H2></Col>
+                        <Col style={{ alignContent: "flex-end" }}><Text style={{ padding: 10, color: "#011b1d", marginTop: 10, textAlign:"right" }}>Sign Out</Text></Col>
                     </Grid>
                     <Card>         
                         <Form>
@@ -40,10 +38,6 @@ export default class Profile_screen extends Component {
                                 <Label>Confirm Password</Label>
                                 <Input secureTextEntry defaultValue="arya020595" />
                             </Item>
-                        </Form>
-                    </Card>
-                    <Card>
-                        <Form>
                             <Item stackedLabel>
                                 <Label>Full Name</Label>
                                 <Input defaultValue="Arya Rifqi Pratama" />
@@ -54,17 +48,16 @@ export default class Profile_screen extends Component {
                             </Item>
                             <Item stackedLabel last>
                                 <Label>Upload Image</Label>
-                                <Button style={{ backgroundColor:"#CCC" }}><Text>Choose file</Text></Button>
                             </Item>
+                            <TouchableOpacity>
+                                <Footer style={{ alignItems: "center", backgroundColor: "#2b7873" }}><Icon name="save" size={13} color="white" /><Text style={{ fontWeight: "bold", color: "white" }} onPress={() => {
+                                    { this.props.navigation.navigate('Register') }
+                                }}> SAVE</Text>
+                                </Footer>
+                            </TouchableOpacity>
                         </Form>
                     </Card>
                 </Content>
-                <TouchableOpacity>
-                    <Footer style={{ alignItems: "center", backgroundColor: "#ff3c0e" }}><Icon name="save" size={13} color="white" /><Text style={{ fontWeight: "bold",color:"white" }} onPress={() => {
-                        { this.props.navigation.navigate('Register') }
-                    }}> SAVE</Text>
-                    </Footer>
-                </TouchableOpacity>
             </Container>
         );
     }

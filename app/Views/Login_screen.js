@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from "react-native";
 import { Container, Form, Item, Input, Button, Footer } from 'native-base';
+var s = require('../Assets/Style');
 
 export default class Login_screen extends Component {
 
@@ -28,7 +29,7 @@ export default class Login_screen extends Component {
                         <Item regular>
                             <Button onPress={() => {
                                 { this.props.navigation.navigate('Home') }
-                            }} style={{ flex: 1, marginTop: 20, backgroundColor: "#FF5A09", alignItems: 'center', alignContent: 'center', justifyContent: "center" }}><Text style={{ fontSize: 20, color: "white", fontWeight: "bold", textAlign: "center" }}>Sign In</Text></Button>
+                            }} style={ s.buttonCustom }><Text style={{ fontSize: 20, color: "white", fontWeight: "bold", textAlign: "center" }}>Sign In</Text></Button>
                         </Item>
                         <Item style={{ justifyContent: "center", marginTop: 20, borderBottomWidth: 0, }}>
                             <Text style={{ textAlign: "center" }}>Forgot your password ?</Text>

@@ -5,16 +5,12 @@ import { Container, Content, Card, CardItem, Text, Button, Body,  Fab, List, Lis
 import { Col, Grid } from "react-native-easy-grid";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import customData from '../Faker/db';
+var s = require('../Assets/Style');
 
 export default class Detail_screen extends Component {
 
     static navigationOptions = {
         title: 'Little Kitten',
-        headerTintColor: '#fff',
-        headerStyle: {
-            backgroundColor: '#ff3c0e'
-        },
     };
 
     constructor(props) {
@@ -30,7 +26,7 @@ export default class Detail_screen extends Component {
                 <Content>
                     <Card>
                         <CardItem cardBody>
-                            <Image source={{ uri: 'http://dummyimage.com/189x198.bmp/ff4444/ffffff'}} style={{ height: 250, width: null, flex: 1 }} />
+                            <Image source={{ uri: 'https://www.verlorenofgevonden.nl/webviewer/images/gv0398-01/Foto/G0398-2019000089.jpg'}} style={{ height: 250, width: null, flex: 1 }} />
                         </CardItem>
                         <CardItem style={{ flex: 1, flexDirection: 'row', flexWrap: "wrap", borderBottomColor: "#CCC", borderBottomWidth: 1, color:"#D14836"}}>
                         <View>
@@ -64,7 +60,7 @@ export default class Detail_screen extends Component {
                             </Body>
                         </CardItem>
                         <CardItem style={{flex: 1}}>
-                            <Button style={{ backgroundColor: '#FF5A09', marginRight: 5, flex:1, textAlign: "center", alignContent: "center", justifyContent: "center" }}>
+                            <Button style={ s.buttonCustom }>
                                 <Text> Contact Finder </Text>
                             </Button>
                         </CardItem>
@@ -75,7 +71,7 @@ export default class Detail_screen extends Component {
                     active={!this.state.active}
                     direction="up"
                     containerStyle={{}}
-                    style={{ backgroundColor: '#5067FF' }}
+                    style={{ backgroundColor: '#014344' }}
                     position="bottomRight"
                     onPress={() => this.setState({ active: !this.state.active })}>
                     <Icon name="share-alt" />
