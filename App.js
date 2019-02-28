@@ -28,7 +28,7 @@ const AppNavigator = createStackNavigator(
     ItemList: ItemList_screen
   },
   {
-    initialRouteName: "Register",
+    initialRouteName: "ItemAdd",
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: '#004445',

@@ -29,6 +29,8 @@ export default class Register_screen extends Component {
             password: this.state.password,
         };
 
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
         if (this.state.password != this.state.repassword) {
             Toast.show({
                 text: 'Password and confirm Password is not match !',
@@ -41,7 +43,13 @@ export default class Register_screen extends Component {
                 duration: 2000,
                 type: "danger",
             })
-        } else {
+        } else if (reg.test(this.state.email) === false) {
+            Toast.show({
+                text: 'Email not valid',
+                duration: 2000,
+                type: "danger",
+            })
+        }else {
             // alert(JSON.stringify(Users))
            await axios.post('http://192.168.43.108:3333/api/v1/users/', Users)
                 .then(res => {
@@ -79,10 +87,10 @@ export default class Register_screen extends Component {
                                 <Input placeholder="Email" onChangeText={mail => (this.setState({ email: mail }))} />
                             </Item>
                             <Item style={{ backgroundColor: "#EEE", marginBottom: 5 }} regular>
-                                <Input placeholder="Password" onChangeText={pass => (this.setState({ password: pass }))} />
+                                <Input secureTextEntry={true} placeholder="Password" onChangeText={pass => (this.setState({ password: pass }))} />
                             </Item>
                             <Item style={{ backgroundColor: "#EEE" }} regular>
-                                <Input placeholder="Confirm Password" onChangeText={repass => (this.setState({ repassword: repass }))} />
+                                <Input secureTextEntry={true} placeholder="Confirm Password" onChangeText={repass => (this.setState({ repassword: repass }))} />
                             </Item>
                             <Item regular>
                                 <Button style={s.buttonCustom} onPress={() => { this.handleSubmit() }}><Text style={{ fontSize: 20, color: "white", fontWeight: "bold", textAlign: "center" }}>Sign Up</Text></Button>

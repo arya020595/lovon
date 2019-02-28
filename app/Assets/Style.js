@@ -19,7 +19,54 @@ module.exports = StyleSheet.create({
     },
     smallTitleCustom: {
         color: "#011b1d", fontSize: 8, fontWeight: "bold"
-    }
+    },
+    statusItemLost: {
+        fontWeight: 'bold',
+        color: 'white',
+        position: 'absolute', // child
+        top: 7, // position where you want
+        right: 7,
+        padding: 7,
+        fontSize: 12,
+        zIndex: 2,
+        width: 70,
+        textAlign: "center",
+        backgroundColor: "#D14836",
+    },
+    statusItemFound: {
+        fontWeight: 'bold',
+        color: 'white',
+        position: 'absolute', // child
+        top: 7, // position where you want
+        right: 7,
+        padding: 7,
+        fontSize: 12,
+        zIndex: 2,
+        width: 70,
+        textAlign: "center",
+        backgroundColor: "#0072bc",
+    },
+    statusItemReturn: {
+        fontWeight: 'bold',
+        color: 'white',
+        position: 'absolute', // child
+        top: 7, // position where you want
+        right: 7,
+        padding: 7,
+        fontSize: 12,
+        zIndex: 2,
+        width: 70,
+        textAlign: "center",
+        backgroundColor: "#2b7873",
+    },
+      overlay: {
+        flex: 1,
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        opacity: 0.5,
+        backgroundColor: 'black',
+    }  
 
 
 });
