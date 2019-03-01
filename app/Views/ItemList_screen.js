@@ -3,38 +3,38 @@ import { AppRegistry, StyleSheet, View, Alert, FlatList, Image, TouchableOpacity
 import { Container, Header, Left, Body, Right, Button, Segment, Content, Text, Card, CardItem, Thumbnail, List, ListItem, Fab } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
-import customData from '../Faker/db';
-import axios from 'axios';
+
+import { connect } from 'react-redux';
+import { getItems } from '../Redux/Actions/Items';
+
 import Moment from 'moment';
 
 var s = require("../Assets/Style")
 
-export default class itemList_screen extends Component {
+class itemList_screen extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            data: customData, //Ini data dummy
-            items: null
-        };
     }
 
-    async componentDidMount() {
-        await axios.get(`http://192.168.43.108:3333/api/v1/items/`)
-            .then(res => {
-                const items = res;
-                // alert(JSON.stringify(items.data))
-                this.setState({ items: items.data });
-            })
+    componentDidMount() {
+        // Ini menjalankan action atau fungsi
+        this.getDataItems();
+    }
+
+    getDataItems = () => {
+        // Didapat dari import products dari folder action
+        this.props.dispatch(getItems());
     }
 
     render() {
         return (
             <Container>
                 <Grid>
-                    {/* {console.warn(this.state.items)} */}
+                    {/* {console.warn(this.props.Items.data)} */}
                     <FlatList
-                        data={this.state.items}
+                    // Ini ambil dari state global
+                        data={this.props.Items.data}
                         renderItem={({ item }) => (
                             <Col>
                                 <Card>
@@ -88,14 +88,26 @@ export default class itemList_screen extends Component {
                             </Col>
                         )}
                         keyExtractor={(item, index) => index.toString()}
-                        refreshing={false}
-                        onRefresh={this.state.items}
+                        refreshing={this.props.Items.isLoading}
+                        onRefresh={this.getDataItems}
                         numColumns={2}
                     />
                 </Grid>
-               
+                <Fab
+                    style={{ backgroundColor: '#ffba00' }}
+                    position="bottomRight"
+                    onPress={() => (this.props.navigation.navigate("ItemAdd"))}>
+                    <Icon name="pencil" />
+                </Fab>
             </Container>
         );
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        Items: state.Items
+    }
+}
+
+export default connect(mapStateToProps)(itemList_screen)

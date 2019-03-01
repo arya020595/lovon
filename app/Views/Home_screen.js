@@ -1,53 +1,101 @@
 import React, { Component } from 'react';
-import { Image, ImageBackground, Text, View } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Left, Body, Right, H3 } from 'native-base';
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { AsyncStorage, FlatList, Alert } from 'react-native';
+import { Container, Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
 
-var s = require('../Assets/Style');
+import { getItemsUsers } from '../Redux/Actions/Items';
+import { deleteItems } from '../Redux/Actions/Items';
 
-export default class ItemList_screen extends Component {
+
+class Home_screen extends Component {
+
+    async cekToken() {
+        const A = await AsyncStorage.getItem('token')
+        alert(A)
+    }
+
+    componentDidMount() {
+        // Ini menjalankan action atau fungsi
+        this.getDataItemsUsers();
+    }
+
+    getDataItemsUsers = () => {
+        // Didapat dari import products dari folder action
+        this.props.dispatch(getItemsUsers());
+    }
+
+    deleteDataItems = (id) => {
+        Alert.alert(
+            'Delete Confirm',
+            'Are you sure to delete your report ?',
+            [
+                {
+                    text: 'No',
+                    onDismiss: () => { },
+                    style: 'cancel',
+                },
+                {
+                    text: 'Yes',
+                    onPress: () =>// Didapat dari import orders dari folder action
+                        (
+                            this.props.dispatch(deleteItems(id)),
+                            this.props.dispatch(getItemsUsers())
+                        )
+                },
+            ],
+            { cancelable: false },
+        );
+    }
+
+    // ======================FOR RENDERING ITEM FLATLIST==============================================
+
+    _keyExtractor = (item, index) => item.id.toString();;
+
+    _renderItem = ({ item }) => (
+        <ListItem thumbnail onPress={() => (this.props.navigation.navigate("ItemUpdate", { id: item.id }))}>
+            <Left>
+                <Thumbnail square source={{ uri: item.image_item }} />
+            </Left>
+            <Body>
+                <Text>{item.name_item}</Text>
+                <Text note >{item.status_item}</Text>
+            </Body>
+            <Right>
+                <Icon
+                    size={30}
+                    name="trash"
+                    color="#D14836"
+                    onPress={() => (this.deleteDataItems(item.id))}>
+                </Icon>
+            </Right>
+        </ListItem>
+    );
+
+    /* ======================END RENDERING ITEM FLATLIST============================================== */
 
     render() {
+        // console.warn(this.props.Items.detailuser)
         return (
             <Container>
-                <Content>
-                    <Card>
-                        <Grid style={{ padding: 5 }}>  
-                            <Row style={{ padding: 5 }}>
-                                <Col size={40}>
-                                    <ImageBackground
-                                        source={{ uri: 'https://www.verlorenofgevonden.nl/webviewer/images/gv0748-01/Foto/G0748-2019000137.jpg' }}
-                                        style={{
-                                            flex: 1,
-                                            height: 150,
-                                            position: 'relative', // because it's parent
-                                        }}>
-                                    </ImageBackground>
-                                </Col>
-                                <Col size={60} style={{ padding: 10 }}>
-                                    <Text style={ s.titleCustom }>Please found my key :(</Text>
-                                    <Text style={{ marginTop: 5, }}>4296 Everett Plaza</Text>
-                                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginTop: 5, }}>
-                                        <Icon
-                                            size={30}
-                                            name="ban"
-                                            color="#D14836"
-                                            onPress={this.loginWithFacebook}>
-                                        </Icon><Text style={{ marginLeft: 10, color: "#D14836" }}>LOST</Text>
-                                    </View>
-                                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5, backgroundColor: "#6fb98f" }}><Icon
-                                        size={20}
-                                        name="info-circle"
-                                        color="white"
-                                        onPress={this.loginWithFacebook}>
-                                    </Icon><Text style={{ textAlign: "center", fontWeight: "bold", color: "white", marginLeft: 10, }}>Report Returned</Text></View>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </Card>
-                </Content>
+                <List>
+                    <FlatList
+                        data={this.props.Items.detailuser}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={this._renderItem}
+                        refreshing={this.props.Items.isLoading}
+                        onRefresh={this.getDataItemsUsers}
+                    />
+                </List>
             </Container>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        Items: state.Items
+    }
+}
+
+export default connect(mapStateToProps)(Home_screen)

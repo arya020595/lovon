@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, AsyncStorage } from "react-native";
 import { Container, Form, Item, Input, Button, Footer, Root, Toast } from 'native-base';
 
 import axios from 'axios';
@@ -13,63 +13,52 @@ export default class Login_screen extends Component {
         },
     };
 
-    state = {
-        email: null,
-        password: null,
-        users: null
+    constructor(props) {
+        super(props)
+        this.state = {
+            email: null,
+            password: null,
+            users: null,
+            token: null,
+            data: null
+        }
+        // if (this.state.token != null) {
+        //     this.props.navigation.navigate('Home')
+        // }
     }
 
-    async componentDidMount() {
-        await axios.get(`http://192.168.43.108:3333/api/v1/users/`)
-            .then(res => {
-                const users = res;
-                // alert(JSON.stringify(users.data))
-                this.setState({ users: users.data });
-            })
-    }
-
-    handleSubmit = async () => {
-
-        // const inventory = [
-        //     { name: 'apples', quantity: 2 },
-        //     { name: 'bananas', quantity: 0 },
-        //     { name: 'cherries', quantity: 5 }
-        // ];
+    async handleSubmit() {
 
         const Users = {
             email: this.state.email,
             password: this.state.password,
         };
 
-        // const result = this.state.users.find(cari => cari.email == this.state.email && cari.password == this.state.password);
-
-        if (this.state.password == null || this.state.email == null) {
-            Toast.show({
-                text: 'Please fill all your form',
-                duration: 2000,
-                type: "danger",
+        await axios.post('http://192.168.43.108:3333/api/v1/users/login', Users)
+            .then(res => {
+                // console.warn(res.data)
+                this.setState({data: res.data})
+                // AsyncStorage.setItem('token', String(this.state.token))
+                // this.props.navigation.navigate('Home')
+                console.warn(this.state.data.access_token.token)
+            }).catch((error) => {
+                alert(error)
             })
-        }
-        else {
-            // console.warn(Users)
-            await axios.post('http://192.168.43.108:3333/api/v1/users/login', Users)
-                .then(res => {
-                    console.log(res);
-                    console.log(res.data);
-                    this.props.navigation.navigate('Home')
-                }).catch(() => {
-                    Toast.show({
-                        text: 'Your email and password is not correct',
-                        duration: 2000,
-                        type: "danger"
-                    })
-                })
-        }
-        // Tadi kesalahannya karena properti yang ada di form berbeda dengan properti yang ada di database
+        // console.warn(this.state.token)
     }
 
+    // async cekToken(){
+    //     const A = await AsyncStorage.getItem('token')
+    //     alert(A)
+    // }
+
+    // async hapusToken() {
+    //     const A = await AsyncStorage.removeItem('token')
+    //     alert(A)
+    // }
+
     render() {
-        // console.warn(JSON.stringify(this.state.users))
+        console.warn(this.state.token)
         return (
             <Root>
                 <Container>
@@ -93,6 +82,8 @@ export default class Login_screen extends Component {
                             </Item>
                         </Form>
                     </View>
+                    <Text onPress={()=>{this.cekToken()}}>Cek token</Text>
+                    <Text onPress={() => { this.hapusToken() }}>Hapus token</Text>
                     <Footer style={{ alignItems: "center", backgroundColor: "transparent" }}><Text>Don't have an account ?</Text><Text style={{ fontWeight: "bold" }} onPress={() => {
                         { this.props.navigation.navigate('Register') }
                     }}> Sign up</Text></Footer>

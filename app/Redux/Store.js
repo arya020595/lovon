@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import reducers from './reducers'
+import reducers from './Reducers'
 
 const logger = createLogger({});
 

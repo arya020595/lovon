@@ -12,9 +12,11 @@ import {
 } from 'react-native';
 import { Container, Content, Toast, Root } from 'native-base';
 import DatePicker from 'react-native-datepicker'
-import axios from 'axios';
 
-export default class ItemAdd_screen extends Component {
+import { connect } from 'react-redux';
+import { createItems } from '../Redux/Actions/Items';
+
+class ItemAdd_screen extends Component {
 
     state = {
         name_item: '',
@@ -31,7 +33,7 @@ export default class ItemAdd_screen extends Component {
         this.setState({ chosenDate: newDate });
     }
 
-    handleSubmit = async () => {
+    handleSubmit = () => {
 
         const Items = {
             name_item: this.state.name_item,
@@ -44,19 +46,30 @@ export default class ItemAdd_screen extends Component {
             user_id: this.state.user_id
         };
 
-        await axios.post('http://192.168.43.108:3333/api/v1/items/', Items)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
+        try {
+            if (this.props.dispatch(createItems(Items))) {
                 Toast.show({
-                    text: 'Your report success',
-                    duration: 2000,
+                    text: "Report Success",
+                    duration: 3000,
                     type: "success"
-                })
-            }).catch((error) => {
-                alert(error)
+                })   
+            }
+
+            this.setState({
+                name_item: '',
+                image_item: '',
+                location_item: '',
+                status_item: 'lost',
+                date_item: new Date(),
+                id_category: '1',
+                description_item: '',
+                user_id: ''
             })
-        // alert(JSON.stringify(Items))
+        } catch (error) {
+            alert("data error")
+        }
+        
+        // console.warn(Items)
     }
 
     render() {
@@ -74,7 +87,10 @@ export default class ItemAdd_screen extends Component {
                                     placeholder="Title"
                                     keyboardType="email-address"
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(name) => this.setState({ name_item: name })} />
+                                    onChangeText={(name) => this.setState({ name_item: name })} 
+                                    value={this.state.name_item}
+                                    />
+                                    
                             </View>
 
                             <View style={styles.inputContainer}>
@@ -83,7 +99,9 @@ export default class ItemAdd_screen extends Component {
                                     placeholder="Put url image"
                                     keyboardType="email-address"
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(image) => this.setState({ image_item: image })} />
+                                    onChangeText={(image) => this.setState({ image_item: image })} 
+                                    value={this.state.image_item}
+                                    />
                             </View>
 
                             <View style={styles.inputContainer}>
@@ -91,7 +109,9 @@ export default class ItemAdd_screen extends Component {
                                 <TextInput style={styles.inputs}
                                     placeholder="Location"
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(location) => this.setState({ location_item: location })} />
+                                    onChangeText={(location) => this.setState({ location_item: location })} 
+                                    value={this.state.location_item}
+                                    />
                             </View>
 
                             <View style={styles.inputContainer}>
@@ -100,7 +120,7 @@ export default class ItemAdd_screen extends Component {
                                     selectedValue={this.state.status_item}
                                     style={styles.inputs}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({ status_item: itemValue })
+                                    this.setState({ status_item: itemValue })
                                     }>
                                     <Picker.Item label="Lost" value="lost" />
                                     <Picker.Item label="Found" value="found" />
@@ -153,7 +173,9 @@ export default class ItemAdd_screen extends Component {
                                 <TextInput style={styles.inputs}
                                     placeholder="description"
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(description) => this.setState({ description_item: description })} />
+                                    onChangeText={(description) => this.setState({ description_item: description })} 
+                                    value={this.state.description_item}
+                                    />
                             </View>
 
                             <View style={styles.inputContainer}>
@@ -161,7 +183,9 @@ export default class ItemAdd_screen extends Component {
                                 <TextInput style={styles.inputs}
                                     placeholder="User"
                                     underlineColorAndroid='transparent'
-                                    onChangeText={(user_id) => this.setState({ user_id: user_id })} />
+                                    onChangeText={(user_id) => this.setState({ user_id: user_id })} 
+                                    value={this.state.user_id}
+                                    />
                             </View>
 
                             <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handleSubmit}>
@@ -174,6 +198,14 @@ export default class ItemAdd_screen extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        Items: state.Items
+    }
+}
+
+export default connect(mapStateToProps)(ItemAdd_screen)
 
 const styles = StyleSheet.create({
     container: {

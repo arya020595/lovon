@@ -3,6 +3,7 @@ import { Text, TouchableOpacity } from "react-native";
 import { Container, Header, Content, Input, Item, Form, Footer, Card, CardItem, Body, Label, H2, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import axios from 'axios';
 
 var s = require("../Assets/Style")
 
@@ -11,6 +12,15 @@ export default class Profile_screen extends Component {
     static navigationOptions = {
         title: 'My Account',
     };
+
+    async componentDidMount() {
+        await axios.get(`http://192.168.43.108:3333/api/v1/users/1`)
+            .then(res => {
+                const users = res;
+                alert(JSON.stringify(users.data))
+                // this.setState({ items: items.data });
+            })
+    }
 
     render() {
         return (
